@@ -47,7 +47,7 @@ export default class TasksController {
     return await task.save()
   }
 
-  public async delete({ request, response }: HttpContextContract) {
+  public async delete({ request }: HttpContextContract) {
     const deleteSchame = schema.create({
       id: schema.number(),
 
@@ -62,7 +62,7 @@ export default class TasksController {
     const task = await Task.findBy('id', id);
     if (!task) throw new Error(`can't delete task ${id}`);
     await task.delete()
-    return response.ok('Task deleted successfully')
+    return { id: task.id }
 
   }
 }
