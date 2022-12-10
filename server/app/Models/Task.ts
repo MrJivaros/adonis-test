@@ -6,10 +6,14 @@ export default class Task extends BaseModel {
   public id: number
 
   @column()
-  public done: boolean
+  public title: string
 
   @column()
-  public title: string
+  public description?: string
+
+  @column()
+  public done: boolean
+
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

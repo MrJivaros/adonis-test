@@ -14,15 +14,16 @@ export default class TasksController {
   public async create({ request }: HttpContextContract) {
     const taskSchema = schema.create({
       title: schema.string({ trim: true }),
+      description: schema.string.optional({ trim: true })
     })
 
-    const { title } = await request.validate({
+    const payload = await request.validate({
       schema: taskSchema, messages: {
         required: 'The {{ field }} is required to create a task',
       }
     })
 
-    const task = await Task.create({ title })
+    const task = await Task.create(payload)
     return task
   }
 
@@ -30,10 +31,11 @@ export default class TasksController {
     const updateSchame = schema.create({
       id: schema.number(),
       title: schema.string({ trim: true }),
-      done: schema.boolean()
+      done: schema.boolean(),
+      description: schema.string.optional({ trim: true })
     })
 
-    const { title, done, id } = await request.validate({
+    const { id, title, done, description } = await request.validate({
       schema: updateSchame, messages: {
         required: 'The {{ field }} is required to create a task',
       }
@@ -44,6 +46,7 @@ export default class TasksController {
 
     task.title = title;
     task.done = done;
+    task.description = description
     return await task.save()
   }
 

@@ -1,19 +1,22 @@
 import { useEffect, useState } from 'react'
 import { TodoQuery } from './api/Todo'
 import TaskList from './components/TaskList/TaskList'
-import { TodoAsItem } from './types/types'
+import { TodoAsItem, TodoToAdd } from './types/types'
 
 function App() {
- const [title, setTitle] = useState<string>()
+ const [taskToAdd, setTaskToAdd] = useState<TodoToAdd>({
+  title: '',
+  description: ''
+ })
  const [tasks, setTasks] = useState<TodoAsItem[]>([])
  const findAndSetOnState = async () => {
   setTasks(await TodoQuery.findAll())
  }
 
  const createtask = async () => {
-  if (title) {
-   await TodoQuery.create({ title })
-   setTitle(undefined)
+  if (taskToAdd) {
+   await TodoQuery.create(taskToAdd)
+   setTaskToAdd({ title: '', description: '' })
    await findAndSetOnState()
   }
  }
@@ -47,15 +50,24 @@ function App() {
      }}
     >
      <input
-      className='form-control form-control-lg'
+      className='form-control form-control-lg mb-3'
       type='text'
       placeholder='New task title here ... '
       required
-      value={title ?? ''}
+      value={taskToAdd.title}
       onChange={(event) => {
-       setTitle(event.target.value)
+       setTaskToAdd({ ...taskToAdd, title: event.target.value })
       }}
      />
+     <textarea
+      className='form-control'
+      rows={3}
+      placeholder='The task description here ... '
+      value={taskToAdd.description ?? ''}
+      onChange={(event) => {
+       setTaskToAdd({ ...taskToAdd, description: event.target.value })
+      }}
+     ></textarea>
      <div className='d-flex justify-content-end'>
       <button className='btn btn-success m-2'>Submit</button>
      </div>
