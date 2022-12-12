@@ -1,5 +1,5 @@
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
-import { DateTime } from 'luxon'
+import { DateTime } from "luxon"
 
 export default class Task extends BaseModel {
   @column({ isPrimary: true })
@@ -9,16 +9,16 @@ export default class Task extends BaseModel {
   public title: string
 
   @column()
-  public description?: string
+  public description: string | null
 
   @column()
   public done: boolean
 
 
   @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+  public createdAt: DateTime | null
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
+  public updatedAt: DateTime | null
 
 }
